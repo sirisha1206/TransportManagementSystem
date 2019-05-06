@@ -1,0 +1,90 @@
+"C:\Program Files\JetBrains\WebStorm 2017.3.4\bin\runnerw.exe" "C:\Program Files\nodejs\node.exe" "C:\Users\Sirisha Sunkara\Desktop\Spring19\IDBMS\Project\TMSProject\app.js"
+listening on port 3000
+Register Details
+{ firstname: 'sirisha',
+  lastname: 'sunkara',
+  email: 'nsbz5@mail.umkc.edu',
+  phone: '9132576976',
+  username: 'sirishasunkara',
+  password: 'Sirisha1206',
+  usertype: 'user' }
+Register Output:[object Object]
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result[object Object]
+Admin Output:[object Object]
+Approve user Details:[object Object]
+Approve user details output:[object Object]
+Admin Output:
+Login Details:[object Object]
+Login Result
+Login Details:[object Object]
+Login Result[object Object]
+All routes:[object Object]
+Get Booking Details:[object Object]
+All routes output:
+Get booking output:
+All routes:[object Object]
+All routes output:
+Get Booking Details:[object Object]
+Get booking output:
+All routes:[object Object]
+Get Booking Details:[object Object]
+All routes output:
+Get booking output:
+All routes:[object Object]
+All routes output:
+Get Booking Details:[object Object]
+Get booking output:
+Register Details
+{ firstname: 'john',
+  lastname: 'p',
+  email: 'john@gmail.com',
+  phone: '123456789',
+  username: 'john1234',
+  password: 'John1234',
+  usertype: 'driver' }
+Register Output:[object Object]
+Login Details:[object Object]
+Login Result[object Object]
+Admin Output:[object Object]
+Approve user Details:[object Object]
+Approve user details output:[object Object]
+Admin Output:
+Login Details:[object Object]
+Login Result[object Object]
+Get Routes:[object Object]
+Routes Output:
+Route Submit:[object Object]
+Route Submit Output:[object Object]
+Get Routes:[object Object]
+Routes Output:[object Object]
+Route Submit:[object Object]
+Route Submit Output:[object Object]
+Get Routes:[object Object]
+Routes Output:[object Object],[object Object]
+Login Details:[object Object]
+Login Result[object Object]
+All routes:[object Object]
+All routes output:[object Object],[object Object]
+Get Booking Details:[object Object]
+Get booking output:
+Booking:[object Object]
+booking output:[object Object]
+All routes:[object Object]
+All routes output:[object Object],[object Object]
+Get Booking Details:[object Object]
+Get booking output:[object Object]
+Driver Details:[object Object]
+Driver Details output[object Object]
