@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>USER</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        #myModal{
+            display: none;
+        }
+        body{
+            background-image: url("../images/bg2.jpg");
+        }
+    </style>
+</head>
+<body onload="getallRoutes();getBookings()">
+<div>
+    <button  class="btn btn-lg btn-danger pull-right" style="width: 10%" onclick="logout()">Logout</button>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <div align="center" id="routes1">
+            <h2>Available Routes</h2>
+            <table id="table1" class="table table-dark">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Departure Time</th>
+                    <th scope="col">Arrival Time</th>
+                    <th scope="col">Seats</th>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Book</th>
+
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <div align="center">
+            <h2>Booked Routes</h2>
+            <table id="table2" class="table table-dark">
+                <thead>
+                <tr>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Route ID</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Details</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    function getallRoutes() {
+        $.ajax({
+            type:'GET',
+            url:'/allroutes',
+            data:{user_id:localStorage.getItem('user_id')} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message
+                console.log(data)
+                if(data){
+                    list = ""
+                    for(i=0; i<data.length; i++){
+                        console.log(data[i])
+                       // $('#table1').find('tbody').append('<tr><td>'+data[i].user_id+'</td><td>'+data[i].route_id+'</td><td>'+data[i].from_loc+'</td><td>'+data[i].to_loc+'</td></tr>');
+                        $('#table1').find('tbody').append('<tr><td>'+data[i].route_id+'</td><td>'+data[i].from_loc+'</td><td>'+data[i].to_loc+'</td><td>'+data[i].departure_time+'</td><td>'+data[i].arrival_time+'</td><td>'+data[i].seats+'</td><td>'+data[i].user_id+"</td><td><button class=\"btn btn-success\" onclick=\"book("+data[i].route_id+")\">Book</button></td></tr>");
+
+                        list +="<li>"+data[i].user_id+':'+data[i].from_loc+':'+data[i].to_loc+':'+data[i].arrival_time+':'+data[i].departure_time+"</li>";
+                    }
+                    console.log(list)
+                    $("#routes").html('<h5>'+list+'</h5>')
+                }else{
+                    $("#routes").html('No Data Found').css("color","red");
+                }
+            },
+            error: function(xhr, status, error) {
+                $("#drivererror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+
+    }
+    function book(routeid){
+        console.log(routeid)
+        console.log(localStorage.getItem('user_id'))
+        $.ajax({
+            type:'POST',
+            url:'/book',
+            data:{user_id:localStorage.getItem('user_id'),route_id:routeid} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message
+                console.log(data)
+                if(data){
+                    alert('Booked Successfully')
+                    location.reload()
+                }else{
+                    $("#routes").html('No Data Found').css("color","red");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr)
+                console.log(status)
+                console.log(error)
+                $("#drivererror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+
+    }
+    function getBookings(){
+        $.ajax({
+            type:'GET',
+            url:'/getbookings',
+            data:{user_id:localStorage.getItem('user_id')} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message
+                console.log(data)
+                if(data){
+                    list = ""
+                    for(i=0; i<data.length; i++){
+                        console.log(data[i])
+                        $('#table2').find('tbody').append('<tr><td>'+data[i].user_id+'</td><td>'+data[i].route_id+'</td><td>'+data[i].from_loc+'</td><td>'+data[i].to_loc+"<td><button class=\"btn btn-primary\" onclick=\"driverdetails("+data[i].route_id+")\">Get Driver Details</button></td></tr>");
+
+                      //  $('#table2').find('tbody').append('<tr><td>'+data[i].route_id+'</td><td>'+data[i].from_loc+'</td><td>'+data[i].to_loc+'</td><td>'+data[i].departure_time+'</td><td>'+data[i].arrival_time+'</td><td>'+data[i].seats+'</td><td>'+localStorage.getItem('user_id')+"</td><td><button class=\"btn btn-success\" onclick=\"book("+data[i].route_id+")\">Book</button></td></tr>");
+
+                        list +="<li>"+data[i].user_id+':'+data[i].from_loc+':'+data[i].to_loc+':'+data[i].arrival_time+':'+data[i].departure_time+"</li>";
+                    }
+                    console.log(list)
+                    $("#routes").html('<h5>'+list+'</h5>')
+                }else{
+                    $("#routes").html('No Data Found').css("color","red");
+                }
+            },
+            error: function(xhr, status, error) {
+                $("#drivererror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+    }
+    function driverdetails(routeid) {
+        $.ajax({
+            type:'GET',
+            url:'/getdriverdetails',
+            data:{route_id:routeid} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message
+                console.log(data)
+                list = ""
+                list +="<h5>Name:"+data[0].name+'<h5>Phone:'+data[0].phone+'</h5>Email:'+data[0].email+"</h5>";
+                $(".modal-body").html('<h5>'+list+'</h5>')
+                $('#myModal').modal('show');
+
+            },
+            error: function(xhr, status, error) {
+                $("#drivererror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+
+    }
+    function logout() {
+        location.replace("/views/index.html")
+    }
+
+</script>

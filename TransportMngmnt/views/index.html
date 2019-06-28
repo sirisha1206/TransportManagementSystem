@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        body{
+            background-image: url("../images/bg2.jpg");
+        }
+    </style>
+</head>
+<body>
+<div class="container" style="margin-top: 100px">
+    <div class="jumbotron">
+        <div align="center">
+            <h3><img src="../images/carpool.png">Transport Management System</h3>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" >username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" placeholder="Enter username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="pwd">Password:</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="sel1">User Type:</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="sel1">
+                            <option>user</option>
+                            <option>driver</option>
+                            <option>admin</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 40%;" onclick="login()">Login</button>
+                    </div>
+                </div>
+                <div id="loginerror"></div>
+            </form>
+            <button class="btn btn-lg btn-success" style="width: 40%" onclick="getRegisterPage()"><a style="color: white">Register</a>  </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    function login() {
+        var username = $("#username").val();
+        var password = $("#pwd").val();
+        var usertype = $("#sel1").val();
+        var id = 'sirisha'
+        $.ajax({
+            type:'GET',
+            url:'/login',
+            data:{username:username,password:password} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message
+               if(data.length > 0){
+                    localStorage.setItem('user_id',data[0].user_id)
+                    if(usertype == 'admin')
+                        location.replace("/views/admin.html")
+                    else if(usertype == 'user')
+                        location.replace("/views/user.html")
+                    else
+                        location.replace("/views/driver.html")
+               }else{
+                   $("#loginerror").html('Please check the credentials or admin has to approve').css("color","red");
+                   alert('Please check the credentials or Admin has to approve')
+               }
+            },
+            error: function(xhr, status, error) {
+                console.log(error)
+                console.log(xhr)
+                console.log(status)
+                $("#loginerror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+    }
+    function getRegisterPage() {
+        location.replace("/views/register.html")
+    }
+</script>

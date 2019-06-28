@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        #table1{
+            max-width: 70%;
+            margin-left: 50px;
+            border:3px solid #636768;
+        }
+        body{
+            background-image: url("../images/bg2.jpg");
+        }
+    </style>
+</head>
+<body onload="getUserInfo()">
+<div>
+    <button  class="btn btn-lg btn-danger pull-right" style="width: 10%;" onclick="logout()">Logout</button>
+</div>
+<div class="container" style="margin-top:5%">
+    <div class="jumbotron">
+        <div align="center">
+            <h2>List of users to be approved</h2>
+            <table id="table1" border="1" class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">UserName</th>
+                    <th scope="col">Status</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+     function getUserInfo() {
+         $.ajax({
+             type:'GET',
+             url:'/admin',
+             success:function(data){
+                 data = data.message
+                 console.log(data)
+                 if(data){
+                     //list = ""
+                     for(i=0; i<data.length; i++){
+                         console.log(data[i])
+                         $('#table1').find('tbody').append('<tr><td>'+data[i].user_id+'</td><td>'+data[i].username+"</td><td><button class=\"btn btn-success\" onclick=\"approveUser("+data[i].user_id+")\">approve</button></td></tr>");
+                         //list +="<li>"+data[i].user_id+':'+data[i].username+"<button class=\"btn btn-success\" onclick='approveUser("+data[i].user_id+")'>approve</button></li>";
+                     }
+                     //console.log(list)
+                     //$("#users").html('<h5>'+list+'</h5>')
+                 }else{
+                     $("#users").html('No Data Found').css("color","red");
+                 }
+
+             },
+             error: function(xhr, status, error) {
+                 $("#loginerror").html(xhr.responseJSON.message).css("color","red");
+             }
+         })
+     }
+     function approveUser(id) {
+         $.ajax({
+             type:'POST',
+             url:'/approveuser',
+             data:{user_id:id} ,
+             dataType:'json',
+             success:function(data){
+                 data = data.message
+                 console.log(data)
+                 alert('User approved Successfully')
+                 location.reload();
+             },
+             error: function(xhr, status, error) {
+                 $("#loginerror").html(xhr.responseJSON.message).css("color","red");
+             }
+         })
+
+     }
+     function logout() {
+         location.replace("/views/index.html")
+     }
+</script>

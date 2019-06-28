@@ -1,1 +1,138 @@
-<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <title>Driver Route Submission Page</title>    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script></head><body><div class="well">    <div id="datetimepicker1" class="input-append date">        <input data-format="dd/MM/yyyy hh:mm:ss" type="text" />        <span class="add-on">      <i data-time-icon="icon-time" data-date-icon="icon-calendar">      </i>    </span>    </div></div><script type="text/javascript">    $(function() {        $('#datetimepicker1').datetimepicker({            language: 'pt-BR'        });    });</script></body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Driver</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body{
+            background-image: url("../images/bg2.jpg");
+        }
+    </style>
+</head>
+<body onload="getRoutes()">
+<div>
+    <button  class="btn btn-lg btn-danger pull-right"  style="width: 10%" onclick="logout()">Logout</button>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <div align="center">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" >Starting Point</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="start" placeholder="Enter Starting Point">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" >Destination Point:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="destination" placeholder="Enter Destination Point">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Departure Time:</label>
+                    <input type="datetime-local" id="deptarturetime">
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Arrival Time:</label>
+                    <input type="datetime-local" id="arrivaltime">
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" >Available Seats</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="seats" placeholder="Enter Seats">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 40%;" onclick="submitroute()">Submit Route</button>
+                    </div>
+                </div>
+                <div id="drivererror"></div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="jumbotron">
+            <div align="center" id="routes1">
+                <table id="table1" class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Departure Time</th>
+                        <th scope="col">Arrival Time</th>
+                        <th scope="col">Seats</th>
+                        <th scope="col">User ID</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+    function submitroute() {
+        var startingpoint = $("#start").val();
+        var destination = $("#destination").val();
+        var departuretime = $("#deptarturetime").val();
+        var arrivaltime = $("#arrivaltime").val();
+        var seats = $("#seats").val();
+        $.ajax({
+            type:'POST',
+            url:'/routesubmit',
+            data:{startingpoint:startingpoint,destination:destination,departuretime:departuretime,arrivaltime:arrivaltime,seats:seats,user_id:localStorage.getItem('user_id')} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message;
+                console.log(data)
+                alert('Route Submitted successfully')
+            },
+            error: function(xhr, status, error) {
+                $("#drivererror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+    }
+    function getRoutes() {
+        $.ajax({
+            type:'GET',
+            url:'/routes',
+            data:{user_id:localStorage.getItem('user_id')} ,
+            dataType:'json',
+            success:function(data){
+                data = data.message
+                console.log(data)
+                if(data){
+                    list = ""
+                    for(i=0; i<data.length; i++){
+                        console.log(data[i])
+                        $('#table1').find('tbody').append('<tr><td>'+data[i].route_id+'</td><td>'+data[i].from_loc+'</td><td>'+data[i].to_loc+'</td><td>'+data[i].departure_time+'</td><td>'+data[i].arrival_time+'</td><td>'+data[i].seats+'</td><td>'+localStorage.getItem('user_id')+'</td></tr>');
+
+                        list +="<li>"+data[i].user_id+':'+data[i].from_loc+':'+data[i].to_loc+':'+data[i].arrival_time+':'+data[i].departure_time+"</li>";
+                    }
+                    console.log(list)
+                    $("#routes").html('<h5>'+list+'</h5>')
+                }else{
+                    $("#routes").html('No Data Found').css("color","red");
+                }
+            },
+            error: function(xhr, status, error) {
+                $("#drivererror").html(xhr.responseJSON.message).css("color","red");
+            }
+        })
+
+    }
+    function logout() {
+        location.replace("/views/index.html")
+    }
+
+</script>

@@ -1,206 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register Page</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-<body>
-<div class="container" style="margin-top:   50px;">
-    <div class="jumbotron">
-        <div align="center">
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-sm-2">First Name:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="fname" placeholder="Enter First Name" minlength="5" maxlength="15">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Last Name:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="lname" placeholder="Enter Last Name" minlength="5" maxlength="10">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="email">Email:</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control" id="email" placeholder="Enter email">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="email">Phone:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="phone" placeholder="Enter phone" maxlength="10">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="email">username</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="username" placeholder="Enter username" minlength="8" maxlength="15">
-                    </div>
-                </div>
-                
-                
- 
- 
- 
- 
- 
- 
- 
-
-<div class="form-group">
- 
-    <label class="control-label col-sm-2" for="pwd">Password</label>
-    <div class="col-sm-10">
-    <input type="password" class="form-control" id="pwd" name="pwd" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required placeholder="Enter password">
-    </div>
-    
-</div>
-
-<div id="message">
-  <h6>Password must contain the following:</h3>
-  <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-  <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-  <p id="number" class="invalid">A <b>number</b></p>
-  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-</div>
-				
-
-               
-      
-                <div class="form-group">
-                    <label class="control-label col-sm-2" for="sel1">User Type:</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" id="sel1">
-                            <option>user</option>
-                            <option>driver</option>
-                        </select>
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary btn-lg" style="width: 40%;" onclick="registerData()">Submit</button>
-                    </div>
-                </div>
-            </form>
-            <div id="location"></div>
-        </div>
-    </div>
-</div>
-</body>
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 <style>
-/* Style all input fields */
-
-
-/* Style the submit button */
-input[type=submit] {
-  background-color: #4CAF50;
-  color: white;
-}
-
-/* Style the container for inputs */
-.container {
-  background-color: #f1f1f1;
-  padding: 10px;
-}
-
-/* The message box is shown when the user clicks on the password field */
-#message {
-  display:none;
-  background: #f1f1f1;
-  color: #000;
-  position: relative;
-  padding: 15px;
-  margin-top: 10px;
-}
-
-#message p {
-  font-size: 10px;
-}
-
-/* Add a green text color and a checkmark when the requirements are right */
-.valid {
-  color: green;
-}
-
-.valid:before {
-  position: relative;
-  left: -20px;
-  content: "✔";
-}
-
-/* Add a red text color and an "x" when the requirements are wrong */
-.invalid {
-  color: red;
-}
-
-.invalid:before {
-  position: relative;
-  left: -35px;
-  content: "✖";
-}
+    table{
+        width:500px;
+        height:500px;
+    }
+    table td{
+        padding:10px;
+        margin:10px;
+        border:1px solid #ccc;
+    }
 </style>
 <script>
-var myInput = document.getElementById("pwd");
-var letter = document.getElementById("letter");
-var capital = document.getElementById("capital");
-var number = document.getElementById("number");
-var length = document.getElementById("length");
+    function createTable(){
 
-// When the user clicks on the password field, show the message box
-myInput.onfocus = function() {
-  document.getElementById("message").style.display = "block";
-}
+        mytable = $('<table></table>').attr({ id: "basicTable" });
+        var rows = new Number($("#rowcount").val());
+        var cols = new Number($("#columncount").val());
+        var tr = [];
+        for (var i = 0; i < rows; i++) {
+            var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(mytable);
+            for (var j = 0; j < cols; j++) {
+                $('<td></td>').text("text1").appendTo(row);
+            }
 
-// When the user clicks outside of the password field, hide the message box
-myInput.onblur = function() {
-  document.getElementById("message").style.display = "none";
-}
+        }
+        console.log("TTTTT:"+mytable.html());
+        mytable.appendTo("#box");
 
-// When the user starts to type something inside the password field
-myInput.onkeyup = function() {
-  // Validate lowercase letters
-  var lowerCaseLetters = /[a-z]/g;
-  if(myInput.value.match(lowerCaseLetters)) {  
-    letter.classList.remove("invalid");
-    letter.classList.add("valid");
-  } else {
-    letter.classList.remove("valid");
-    letter.classList.add("invalid");
-  }
-  
-  // Validate capital letters
-  var upperCaseLetters = /[A-Z]/g;
-  if(myInput.value.match(upperCaseLetters)) {  
-    capital.classList.remove("invalid");
-    capital.classList.add("valid");
-  } else {
-    capital.classList.remove("valid");
-    capital.classList.add("invalid");
-  }
-
-  // Validate numbers
-  var numbers = /[0-9]/g;
-  if(myInput.value.match(numbers)) {  
-    number.classList.remove("invalid");
-    number.classList.add("valid");
-  } else {
-    number.classList.remove("valid");
-    number.classList.add("invalid");
-  }
-  
-  // Validate length
-  if(myInput.value.length >= 8) {
-    length.classList.remove("invalid");
-    length.classList.add("valid");
-  } else {
-    length.classList.remove("valid");
-    length.classList.add("invalid");
-  }
-}
+    }
 </script>
+
+Row Count:<input type="text" id="rowcount" />
+Column Count:<input type="text" id="columncount" />
+<input type="button" onclick="createTable();" value="Create Table" />
+<div id="box">
+</div>

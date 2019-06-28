@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('transportmngmnt:server');
+var debug = require('debug')('tmsproject:server');
 var http = require('http');
 
 /**
